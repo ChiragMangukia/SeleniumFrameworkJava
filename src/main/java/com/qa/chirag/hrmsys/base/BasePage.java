@@ -19,24 +19,21 @@ public class BasePage {
 	protected WebDriver driver = null;
 	private Properties prop;
 	private OptionsManager optionsManager;
-	private String browserName;
 	
 	private static Logger log = LogManager.getLogger(BasePage.class);
 	
-	protected void initDriver() {
+	protected WebDriver initDriver(String browser) {
 		if(driver == null) {
-			prop = Utilities.getProp();
 			optionsManager = new OptionsManager(prop);
-			this.browserName = prop.getProperty("browser").trim();
-			if(browserName.equalsIgnoreCase(Browser.CHROME.name())) {
+			if(browser.equalsIgnoreCase(Browser.CHROME.name())) {
 				System.setProperty("webdriver.chrome.driver", "./Drivers/chromedriver.exe");
 				driver = new ChromeDriver(optionsManager.getChromeOptions());
 				log.info("Chrome driver initialized");
-			} else if(browserName.equalsIgnoreCase(Browser.FIREFOX.name())) {
+			} else if(browser.equalsIgnoreCase(Browser.FIREFOX.name())) {
 				System.setProperty("webdriver.gecko.driver", "./Drivers/geckodriver.exe");
 				driver = new ChromeDriver(optionsManager.getChromeOptions());
 				log.info("Firefox driver initialized");
-			} else if (browserName.equalsIgnoreCase(Browser.EDGE.name())) {
+			} else if (browser.equalsIgnoreCase(Browser.EDGE.name())) {
 				System.setProperty("webdriver.edge.driver", "./Drivers/msedgedriver.exe");
 				driver = new EdgeDriver();
 				log.info("Edge driver initialized");
@@ -46,9 +43,8 @@ public class BasePage {
 			driver.manage().window().maximize();
 			driver.manage().timeouts().implicitlyWait(TestUtils.IMPLICIT_WAIT, TimeUnit.SECONDS);
 			driver.manage().timeouts().pageLoadTimeout(TestUtils.PAGE_LOAD_TIMEOUT, TimeUnit.SECONDS);
-			driver.get(prop.getProperty("url").trim());
-			log.info("URL opened: " + prop.getProperty("url").trim());
 		}
+		return driver;
 	}
 	
 	protected void closeCon() {
