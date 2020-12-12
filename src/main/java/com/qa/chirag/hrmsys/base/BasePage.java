@@ -16,7 +16,7 @@ import com.qa.chirag.hrmsys.utils.Utilities;
 
 public class BasePage {
 	
-	protected WebDriver driver = null;
+	private WebDriver driver = null;
 	private Properties prop;
 	private OptionsManager optionsManager;
 	
@@ -24,6 +24,7 @@ public class BasePage {
 	
 	protected WebDriver initDriver(String browser) {
 		if(driver == null) {
+			prop = Utilities.getProp();
 			optionsManager = new OptionsManager(prop);
 			if(browser.equalsIgnoreCase(Browser.CHROME.name())) {
 				System.setProperty("webdriver.chrome.driver", "./Drivers/chromedriver.exe");
