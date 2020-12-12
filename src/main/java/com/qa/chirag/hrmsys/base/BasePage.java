@@ -1,14 +1,18 @@
 package com.qa.chirag.hrmsys.base;
 
+import java.io.File;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 
+import com.google.common.io.Files;
 import com.qa.chirag.hrmsys.utils.Browser;
 import com.qa.chirag.hrmsys.utils.OptionsManager;
 import com.qa.chirag.hrmsys.utils.TestUtils;
@@ -16,7 +20,7 @@ import com.qa.chirag.hrmsys.utils.Utilities;
 
 public class BasePage {
 	
-	private WebDriver driver = null;
+	private static WebDriver driver = null;
 	private Properties prop;
 	private OptionsManager optionsManager;
 	
@@ -52,6 +56,20 @@ public class BasePage {
 		driver.quit();
 		driver = null;
 		log.info("Driver quit");
+	}
+	
+	public static String takeScreenshot() {
+		String fileName = null;
+		try {
+			File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+			fileName = System.currentTimeMillis() + ".png";
+			String path = "./Screenshots/" + fileName;
+			File destination = new File(path);
+			Files.copy(src, destination);
+		} catch (Exception e) {
+			log.error(e.getStackTrace());
+		}
+		return fileName;
 	}
 
 }
