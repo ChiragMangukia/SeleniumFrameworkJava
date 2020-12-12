@@ -71,5 +71,4 @@ public class BasePage {
 		}
 		return fileName;
 	}
-
 }
